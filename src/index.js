@@ -9,12 +9,12 @@ const formEl = document.querySelector('#search-form');
 const inputEl = document.querySelector([(name = 'searchQuery')]);
 const galleryEl = document.querySelector('.gallery');
 const btn = document.querySelector('button[type="button"]');
-// const btnload = document.querySelector('.load-more');
+const btnload = document.querySelector('.load-more');
 
 const fetchCl = new FetchClass();
 
 formEl.addEventListener('submit', submitFunc);
-// btnload.addEventListener('click', loadMoreFunc);
+btnload.addEventListener('click', loadMoreFunc);
 
 async function submitFunc(event) {
   event.preventDefault();
@@ -114,11 +114,3 @@ function smoothScroll() {
     behavior: 'smooth',
   });
 }
-
-// function InfinScroll() {
-//   let infScroll = new InfiniteScroll(galleryEl, {
-//     path: '.pagination__next',
-//     append: '.post',
-//     history: false,
-//   });
-// }
