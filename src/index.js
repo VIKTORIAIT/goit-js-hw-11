@@ -9,18 +9,30 @@ const formEl = document.querySelector('#search-form');
 const inputEl = document.querySelector([(name = 'searchQuery')]);
 const galleryEl = document.querySelector('.gallery');
 const btn = document.querySelector('button[type="button"]');
-const btnload = document.querySelector('.load-more');
+// const btnload = document.querySelector('.load-more');
+
+let lastKnownScrollPosition = 0;
+function infinitScrollFunc(e) {
+  const scrHeight = document.documentElement.scrollHeight;
+  const clientHeight = document.documentElement.clientHeight;
+  const scrTop = document.documentElement.scrollTop;
+  lastKnownScrollPosition = scrHeight - clientHeight - scrTop;
+  if (lastKnownScrollPosition === 0) {
+    loadMoreFunc();
+  }
+}
 
 const fetchCl = new FetchClass();
 
 formEl.addEventListener('submit', submitFunc);
-btnload.addEventListener('click', loadMoreFunc);
+// btnload.addEventListener('click', loadMoreFunc);
+window.addEventListener('scroll', infinitScrollFunc);
 
 async function submitFunc(event) {
   event.preventDefault();
   fetchCl.inputT = formEl.elements.searchQuery.value;
   fetchCl.resetPage();
-  btnload.classList.add('js-hidden');
+  // btnload.classList.add('js-hidden');
   galleryEl.innerHTML = '';
 
   try {
@@ -30,7 +42,7 @@ async function submitFunc(event) {
         'Sorry, there are no images matching your search query. Please try again.',
       );
     } else if (post.total > 40) {
-      btnload.classList.remove('js-hidden');
+      // btnload.classList.remove('js-hidden');
       renderPic(post);
       new SimpleLightbox('.gallery a', {
         captionsData: 'alt',
@@ -54,8 +66,9 @@ function renderPic(post) {
 function renderPicLoad(post) {
   galleryEl.insertAdjacentHTML('beforeend', render(post));
 }
+/////////////////////
 
-function loadMoreFunc(event) {
+function loadMoreFunc() {
   fetchCl
     .fetchCards()
     .then(post => {
@@ -68,6 +81,7 @@ function loadMoreFunc(event) {
       console.log(post);
     });
 }
+///////////////////////////
 
 function checkCollection(post) {
   if (Math.ceil(post.totalHits / 40) <= fetchCl.page - 1) {
